@@ -7,10 +7,6 @@ const BusinessComponent = (props) => {
 
     return (
         <View style={styles.businessComponent}>
-            <Button onPress={() => {
-                props.addRevenue(1);
-            }} title="Add"></Button>
-            
             <TouchableOpacity onPress={() => {
                 props.addRevenue(business.revenue);
             }}>
