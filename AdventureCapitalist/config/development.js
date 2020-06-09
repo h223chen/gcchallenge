@@ -5,6 +5,4 @@ const config = Object.assign(base, {
 });
 
 
-console.log(base, config);
-
 export default config;
