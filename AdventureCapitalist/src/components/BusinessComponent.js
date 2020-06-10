@@ -1,29 +1,28 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity, Button} from 'react-native';
+import { StyleSheet,  Text, View, Image, TouchableOpacity } from 'react-native';
 import commonStyles from '../../assets/stylesheets/styles';
 import ProgressBar from 'react-native-progress/Bar';
 
 const BusinessComponent = (props) => {
     const [progress, setProgress] = useState(0);
     const [animating, setAnimating] = useState(false);
-    const [automatic, setAutomatic] = useState(false);
 
     const business = props.business;
     const progressRefreshInterval = 30;
 
     const pollProgress = (delay, startTime, stopTime, revenue) => {
-        setTimeout(function() {
+        setTimeout(() => {
             const nowTime = Date.now();
             setProgress(1 - (stopTime - nowTime)/(stopTime - startTime));
 
             if (nowTime < stopTime) {
                 pollProgress(delay, startTime, stopTime, revenue);
             } else {
-                props.addRevenue(revenue);
+                props.moneyTransaction(revenue);
                 setAnimating(false);
                 setProgress(0);
                                 
-                if (automatic) {
+                if (props.automatic) {
                     setAnimating(true);
                     addRevenueToBusiness(business);
                 }
@@ -37,10 +36,12 @@ const BusinessComponent = (props) => {
         const finishTime = nowTime + workTime;
 
         pollProgress(progressRefreshInterval, nowTime, finishTime, business.revenue);
-    };    
+    };
+
+    
 
     return (
-        <View style={styles.businessComponent}>                        
+        <View style={styles.businessComponent}>
             <TouchableOpacity 
                 pointerEvents={props.disabled ? 'none' : 'auto'} 
                 style={[props.disabled ? commonStyles.disabled : '']}
@@ -59,9 +60,11 @@ const BusinessComponent = (props) => {
             </View>            
             {props.disabled ? 
                 <View style={styles.businessButton}>
-                    <TouchableOpacity onPress={() => {
-                        props.buyBusiness(business);
-                    }}>
+                    <TouchableOpacity 
+                        onPress={() => {
+                            props.buyBusiness(business);
+                        }
+                    }>
                         <Text style={commonStyles.buttonText}>Buy Business: ${business.cost}</Text>
                     </TouchableOpacity>
                 </View> 
@@ -80,11 +83,9 @@ const BusinessComponent = (props) => {
             
             <TouchableOpacity 
                 pointerEvents={props.disabled ? 'none' : 'auto'} 
-                style={[styles.businessButton, props.disabled || automatic ? commonStyles.disabled : '']}
+                style={[styles.businessButton, props.disabled || props.automatic ? commonStyles.disabled : '']}
                 onPress={() => {
-                    setAutomatic((automatic) => {
-                        return automatic = true;
-                    });
+                    props.hireManager(business);
                 }}>
                     
                 <Text style={commonStyles.buttonText}>Hire Manager: ${business.managerCost}</Text>
