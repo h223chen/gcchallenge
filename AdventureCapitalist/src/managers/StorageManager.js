@@ -27,6 +27,16 @@ class StorageManager {
         TIMESTAMP: '@timestamp'
     }
 
+    __resetBlob() {
+        this.__blob = {
+            '@businesses': [global.config.businesses[0].name],
+            '@managers': [],
+            '@money': 0,
+            '@timestamp': Date.now()
+        };
+        this.saveBlob();
+    }
+
     getItem(key) {
         if (this.__blob) {
             return this.__blob[key];

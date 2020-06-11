@@ -17,24 +17,44 @@ const BusinessesComponent = (props) => {
     };
 
     const buyBusiness = (business) => {
-        if (props.money >= business.cost && ownedBusinesses.indexOf(business.name) < 0) {
+        const canBuy = props.money >= business.cost && ownedBusinesses.indexOf(business.name) < 0;
+        if (canBuy) {
             moneyTransaction(-business.cost);
 
             const updatedOwnedBusinesses = [...ownedBusinesses, business.name];
             setOwnedBusinesses(updatedOwnedBusinesses);
             global.storage.setBusinesses(updatedOwnedBusinesses);
         }
+
+        return canBuy;
     };
 
     const hireManager = (business) => {
-        if (props.money >= business.managerCost && managedBusinesses.indexOf(business.name) < 0) {
+        const canHire = props.money >= business.managerCost && managedBusinesses.indexOf(business.name) < 0
+        if (canHire) {
             moneyTransaction(-business.managerCost); // TODO: moneyTransaction should check amount
 
             const updatedManagedBusinesses = [...managedBusinesses, business.name];
             setManagedBusinesses(updatedManagedBusinesses);
             global.storage.setManagers(updatedManagedBusinesses);
         }
+
+        return canHire;
     };
+
+    const upgradeBusiness = (business) => {
+        const upgradeCost = business.cost * business.costMult;
+        const canUpgrade = props.money >= upgradeCost;
+
+        if (canUpgrade) {
+            moneyTransaction(-upgradeCost);
+
+            business.cost *= business.costMult;
+            business.revenue *= business.revenueMult;
+        }
+
+        return canUpgrade;
+    }
 
     return (
         <View style={styles.businessesComponent}>
@@ -51,6 +71,7 @@ const BusinessesComponent = (props) => {
                             moneyTransaction={moneyTransaction}
                             buyBusiness={buyBusiness}
                             hireManager={hireManager}
+                            upgradeBusiness={upgradeBusiness}
                             automatic={managedBusinesses.indexOf(business.name) >= 0}
                             disabled={ownedBusinesses.indexOf(business.name) < 0}
                         />

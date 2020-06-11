@@ -8,13 +8,13 @@ const BusinessComponent = (props) => {
     const [animating, setAnimating] = useState(false);
     const [hired, setHired] = useState(props.automatic);
 
-    const business = props.business;
+    var business = props.business;
     const progressRefreshInterval = 30;
 
     let progressTimeout;
 
     const pollProgress = (delay, startTime, stopTime, revenue) => {
-        if (!progressTimeout) {}
+        if (!progressTimeout) { }
         setTimeout(() => {
             const nowTime = Date.now();
             setProgress(1 - (stopTime - nowTime) / (stopTime - startTime));
@@ -66,15 +66,14 @@ const BusinessComponent = (props) => {
                 <Text style={commonStyles.buttonText}>Returns: {business.revenue}</Text>
             </View>
             {props.disabled ?
-                <View style={styles.businessButton}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            props.buyBusiness(business);
-                        }
-                        }>
-                        <Text style={commonStyles.buttonText}>Buy Business: ${business.cost}</Text>
-                    </TouchableOpacity>
-                </View>
+                <TouchableOpacity
+                    style={styles.businessButton}
+                    onPress={() => {
+                        props.buyBusiness(business);
+                    }
+                    }>
+                    <Text style={commonStyles.buttonText}>Buy Business: ${business.cost}</Text>
+                </TouchableOpacity>
                 :
                 <View style={styles.businessProgress}>
                     <ProgressBar
@@ -86,14 +85,24 @@ const BusinessComponent = (props) => {
                         height={20}
                     />
                 </View>
-            }
+            }            
+            <TouchableOpacity
+                pointerEvents={props.disabled ? 'none' : 'auto'}
+                style={styles.businessButton}
+                onPress={() => {                        
+                    props.upgradeBusiness(business);
+                }}>
 
+                <Text style={commonStyles.buttonText}>upgrade: ${business.cost*business.costMult}</Text>
+            </TouchableOpacity>
             <TouchableOpacity
                 pointerEvents={props.disabled ? 'none' : 'auto'}
                 style={[styles.businessButton, props.disabled || props.automatic ? commonStyles.disabled : '']}
                 onPress={() => {
-                    props.hireManager(business);
-                    setHired(true);
+                    if (props.hireManager(business)) {
+                        setHired(true);
+                    }
+
                 }}>
 
                 <Text style={commonStyles.buttonText}>Hire Manager: ${business.managerCost}</Text>

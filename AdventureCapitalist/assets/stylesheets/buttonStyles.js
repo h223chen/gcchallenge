@@ -1,5 +1,4 @@
-import React from 'react';
-import { StyleSheet } from 'react-native';
+import Shared from '../../src/utils/Shared';
 
 const button = {
     borderWidth: 3,
@@ -12,7 +11,7 @@ const button = {
 };
 
 const buttonText = {
-    fontSize: 18,
+    fontSize: Shared.scaleFontSize(6),
     color: 'white'
 }
 
