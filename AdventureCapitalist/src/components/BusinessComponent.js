@@ -7,6 +7,7 @@ import Shared from '../utils/Shared'
 const BusinessComponent = (props) => {
     const [progress, setProgress] = useState(0);
     const [animating, setAnimating] = useState(false);
+    const [hired, setHired] = useState(props.automatic);
 
     const business = props.business;
     const progressRefreshInterval = 30;
@@ -27,13 +28,13 @@ const BusinessComponent = (props) => {
                 setProgress(0);
 
                 if (props.automatic) {
-                    addRevenueToBusiness(business);
+                    addRevenueToBusiness();
                 }
             }
         }, delay)
     };
 
-    const addRevenueToBusiness = (business) => {
+    const addRevenueToBusiness = () => {
         setAnimating(true);
         const nowTime = Date.now();
         const workTime = business.time * 1000; // in ms
@@ -41,6 +42,11 @@ const BusinessComponent = (props) => {
 
         pollProgress(progressRefreshInterval, nowTime, finishTime, business.revenue);
     };
+
+    if (hired) {
+        setHired(false);
+        addRevenueToBusiness();
+    }
 
     return (
         <View style={styles.businessComponent}>
@@ -50,7 +56,7 @@ const BusinessComponent = (props) => {
                 onPress={() => {
                     if (!animating) {
                         setAnimating(true);
-                        addRevenueToBusiness(business);
+                        addRevenueToBusiness();
                     }
                 }}>
                 <Image style={styles.businessImage} source={require('../../assets/profile.png')}></Image>
@@ -88,6 +94,7 @@ const BusinessComponent = (props) => {
                 style={[styles.businessButton, props.disabled || props.automatic ? commonStyles.disabled : '']}
                 onPress={() => {
                     props.hireManager(business);
+                    setHired(true);
                 }}>
 
                 <Text style={commonStyles.buttonText}>Hire Manager: ${business.managerCost}</Text>
