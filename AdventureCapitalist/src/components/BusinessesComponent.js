@@ -4,24 +4,35 @@ import BusinessComponent from './BusinessComponent';
 
 const BusinessesComponent = (props) => {
     const businesses = global.config.businesses;
-    const [ownedBusinesses, setOwnedBusinesses] = useState([businesses[0].name]);
-    const [managedBusinesses, setManagedBusinesses] = useState([]);
+    const [ownedBusinesses, setOwnedBusinesses] = useState(global.storage.getBusinesses());
+    const [managedBusinesses, setManagedBusinesses] = useState(global.storage.getManagers());
 
     const moneyTransaction = (amount) => {
-        props.setMoney(prevMoney => prevMoney + amount);
+        props.setMoney((prevMoney) => {
+            const updatedMoney = prevMoney + amount;
+            global.storage.setMoney(updatedMoney);
+
+            return updatedMoney;
+        });
     };
 
     const buyBusiness = (business) => {
         if (props.money >= business.cost && ownedBusinesses.indexOf(business.name) < 0) {
             moneyTransaction(-business.cost);
-            setOwnedBusinesses([...ownedBusinesses, business.name]);
+
+            const updatedOwnedBusinesses = [...ownedBusinesses, business.name];
+            setOwnedBusinesses(updatedOwnedBusinesses);
+            global.storage.setBusinesses(updatedOwnedBusinesses);
         }
     };
 
     const hireManager = (business) => {
         if (props.money >= business.managerCost && managedBusinesses.indexOf(business.name) < 0) {
-            moneyTransaction(-business.managerCost);
-            setManagedBusinesses([...managedBusinesses, business.name]);
+            moneyTransaction(-business.managerCost); // TODO: moneyTransaction should check amount
+
+            const updatedManagedBusinesses = [...managedBusinesses, business.name];
+            setManagedBusinesses(updatedManagedBusinesses);
+            global.storage.setManagers(updatedManagedBusinesses);
         }
     };
 

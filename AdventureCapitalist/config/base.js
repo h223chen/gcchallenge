@@ -45,7 +45,8 @@ const base = {
             managerCost: 500,
             revenue: 50
         }
-    ]
+    ],
+    loadFromStorage: true
 }
 
 export default base;

@@ -4,7 +4,7 @@ import BusinessesComponent from '../components/BusinessesComponent';
 import ProfileComponent from '../components/ProfileComponent';
 
 const GameScreen = () => {
-    const [money, setMoney] = useState(0);
+    const [money, setMoney] = useState(global.storage.getMoney());
 
     return (
         <View style={styles.GameScreen}>            
