@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import commonStyles from '../../assets/stylesheets/styles';
 import ProgressBar from 'react-native-progress/Bar';
-import Shared from '../utils/Shared'
 
 const BusinessComponent = (props) => {
     const [progress, setProgress] = useState(0);

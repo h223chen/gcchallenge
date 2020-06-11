@@ -13,7 +13,7 @@ export default function App() {
 	const idle = IdleManager.getInstance();
 
 	if (config.loadFromStorage) {
-		global.storage.loadBlob().then(() => {
+		global.storage.loadBlob().then((blob) => {
 			idle.catchUp();
 			setLoading(false);
 		});
@@ -23,7 +23,6 @@ export default function App() {
 		<View style={styles.container}>
 			{ (!config.loadFromStorage || !loading) &&
 				<GameScreen />
-
 			}
 		</View>
 	);

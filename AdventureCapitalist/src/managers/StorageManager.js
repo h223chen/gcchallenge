@@ -86,8 +86,7 @@ class StorageManager {
     async loadBlob() {
         try {
             const jsonBlob = await AsyncStorage.getItem('@blob');
-            const blob = jsonBlob != null ? JSON.parse(jsonBlob) : null;
-            this.__blob = blob;
+            this.__blob = jsonBlob != null ? JSON.parse(jsonBlob) : this.__blob;
 
             return this.__blob;         
         } catch (e) {
