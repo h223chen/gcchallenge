@@ -39,11 +39,11 @@ export default function App() {
 
 	return (
 		<View style={styles.container}>
-			{ (config.resetButton) &&
-				<Button onPress={resetButtonHandler} title='RESET BLOB'/>
+			{(config.resetButton) &&
+				<Button onPress={resetButtonHandler} title='RESET BLOB' />
 			}
-			
-			{ (!config.loadFromStorage || !loading) &&
+
+			{(!config.loadFromStorage || !loading) &&
 				<GameScreen />
 			}
 		</View>

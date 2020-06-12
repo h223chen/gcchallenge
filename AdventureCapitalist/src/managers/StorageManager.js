@@ -1,129 +1,129 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
 class StorageManager {
-    static instance = null;
-    __blob = {};        
+	static instance = null;
+	__blob = {};
 
-    constructor() {
-        this.__initBlob();
-    }
-    
+	constructor() {
+		this.__initBlob();
+	}
+
     /**
      * @returns {StorageManager}
      */
-    static getInstance() {
-        if (StorageManager.instance == null) {
-            StorageManager.instance = new StorageManager();
-        }
+	static getInstance() {
+		if (StorageManager.instance == null) {
+			StorageManager.instance = new StorageManager();
+		}
 
-        return this.instance;
-    }
+		return this.instance;
+	}
 
-    keys = {
-        BLOB: '@blob',
-        BUSINESSES: '@businesses',
-        MANAGERS: '@managers',
-        MONEY: '@money',
-        TIMESTAMP: '@timestamp',
-        FINANCIALS: '@financials'
-    }
+	keys = {
+		BLOB: '@blob',
+		BUSINESSES: '@businesses',
+		MANAGERS: '@managers',
+		MONEY: '@money',
+		TIMESTAMP: '@timestamp',
+		FINANCIALS: '@financials'
+	}
 
-    __initBlob() {
-        this.__blob = {
-            '@businesses': [global.config.businesses[0].name],
-            '@managers': [],
-            '@money': 0,
-            '@timestamp': Date.now(),
-            '@financials': {}
-        };
+	__initBlob() {
+		this.__blob = {
+			'@businesses': [global.config.businesses[0].name],
+			'@managers': [],
+			'@money': 0,
+			'@timestamp': Date.now(),
+			'@financials': {}
+		};
 
-        global.config.businesses.map((business) => {
-            this.__blob[this.keys.FINANCIALS][business.name] = {
-                cost: business.cost,
-                revenue: business.revenue
-            }
-        });        
-    }
+		global.config.businesses.map((business) => {
+			this.__blob[this.keys.FINANCIALS][business.name] = {
+				cost: business.cost,
+				revenue: business.revenue
+			}
+		});
+	}
 
-    __resetBlob() {
-        // this.__initBlob();
-        localStorage.removeItem(this.keys.BLOB);
-    }
+	__resetBlob() {
+		// this.__initBlob();
+		localStorage.removeItem(this.keys.BLOB);
+	}
 
-    getItem(key) {
-        if (this.__blob) {
-            return this.__blob[key];
-        }
-    }
+	getItem(key) {
+		if (this.__blob) {
+			return this.__blob[key];
+		}
+	}
 
-    setItem(key, value) {
-        if (!this.__blob) {
-            this.__blob = {};
-        }
-        
-        this.__blob[key] = value;
-        this.__blob[this.keys.TIMESTAMP] = Date.now();
-        this.saveBlob();
-    }
+	setItem(key, value) {
+		if (!this.__blob) {
+			this.__blob = {};
+		}
 
-    //convenience getters
-    getBusinesses() {
-        return this.getItem(this.keys.BUSINESSES);
-    }
+		this.__blob[key] = value;
+		this.__blob[this.keys.TIMESTAMP] = Date.now();
+		this.saveBlob();
+	}
 
-    getManagers() {
-        return this.getItem(this.keys.MANAGERS);        
-    }
+	//convenience getters
+	getBusinesses() {
+		return this.getItem(this.keys.BUSINESSES);
+	}
 
-    getMoney() {
-        return this.getItem(this.keys.MONEY);
-    }
+	getManagers() {
+		return this.getItem(this.keys.MANAGERS);
+	}
 
-    getTimestamp() {
-        return this.getItem(this.keys.TIMESTAMP);
-    }
+	getMoney() {
+		return this.getItem(this.keys.MONEY);
+	}
 
-    getFinancials() {
-        return this.getItem(this.keys.FINANCIALS);
-    }
+	getTimestamp() {
+		return this.getItem(this.keys.TIMESTAMP);
+	}
 
-    // convenience setters
+	getFinancials() {
+		return this.getItem(this.keys.FINANCIALS);
+	}
 
-    setBusinesses(businesses) {
-        this.setItem(this.keys.BUSINESSES, businesses);
-    }
+	// convenience setters
 
-    setManagers(managers) {
-        this.setItem(this.keys.MANAGERS, managers);
-    }
+	setBusinesses(businesses) {
+		this.setItem(this.keys.BUSINESSES, businesses);
+	}
 
-    setMoney(money) {
-        this.setItem(this.keys.MONEY, money);
-    }
+	setManagers(managers) {
+		this.setItem(this.keys.MANAGERS, managers);
+	}
 
-    setFinancials(financials) {
-        this.setItem(this.keys.FINANCIALS, financials);
-    }
-    
-    async saveBlob() {
-        try {
-            const jsonBlob = JSON.stringify(this.__blob);
-            AsyncStorage.setItem(this.keys.BLOB, jsonBlob);
-        } catch (e) {
-            console.error(e);
-        }
-    }
-    
-    async loadBlob() {
-        try {
-            const jsonBlob = await AsyncStorage.getItem(this.keys.BLOB);
-            this.__blob = jsonBlob != null ? JSON.parse(jsonBlob) : this.__blob;
+	setMoney(money) {
+		this.setItem(this.keys.MONEY, money);
+	}
 
-            return this.__blob;         
-        } catch (e) {
-            console.error(e);
-        }
-    }
+	setFinancials(financials) {
+		this.setItem(this.keys.FINANCIALS, financials);
+	}
+
+	async saveBlob() {
+		try {
+			const jsonBlob = JSON.stringify(this.__blob);
+			AsyncStorage.setItem(this.keys.BLOB, jsonBlob);
+		} catch (e) {
+			console.error(e);
+		}
+	}
+
+	async loadBlob() {
+		try {
+			const jsonBlob = await AsyncStorage.getItem(this.keys.BLOB);
+			this.__blob = jsonBlob != null ? JSON.parse(jsonBlob) : this.__blob;
+
+			return this.__blob;
+		} catch (e) {
+			console.error(e);
+		}
+	}
 }
-  
+
 export default StorageManager;
