@@ -1,23 +1,11 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
+/**
+ * Singleton class that handles persisting game data to local storage
+ */
 class StorageManager {
 	static instance = null;
 	__blob = {};
-
-	constructor() {
-		this.__initBlob();
-	}
-
-	/**
-	 * @returns {StorageManager}
-	 */
-	static getInstance() {
-		if (StorageManager.instance == null) {
-			StorageManager.instance = new StorageManager();
-		}
-
-		return this.instance;
-	}
 
 	keys = {
 		BLOB: '@blob',
@@ -26,6 +14,21 @@ class StorageManager {
 		MONEY: '@money',
 		TIMESTAMP: '@timestamp',
 		FINANCIALS: '@financials'
+	}
+
+	constructor() {
+		this.__initBlob();
+	}
+
+	/**
+	 * @returns {StorageManager} - singleton instance
+	 */
+	static getInstance() {
+		if (StorageManager.instance == null) {
+			this.instance = new StorageManager();
+		}
+
+		return this.instance;
 	}
 
 	__initBlob() {
@@ -37,6 +40,8 @@ class StorageManager {
 			'@financials': {}
 		};
 
+		// keep track of cost and revenue, these values will change 
+		// upon upgrading business and so need to be persisted
 		global.config.businesses.map((business) => {
 			this.__blob[this.keys.FINANCIALS][business.name] = {
 				cost: business.cost,
@@ -45,8 +50,12 @@ class StorageManager {
 		});
 	}
 
+	/**
+	 * clears user blob.
+	 * NOTE: this is a debug function, only if config is
+	 * set to development.js
+	 */
 	__resetBlob() {
-		// this.__initBlob();
 		localStorage.removeItem(this.keys.BLOB);
 	}
 
@@ -105,6 +114,7 @@ class StorageManager {
 		this.setItem(this.keys.FINANCIALS, financials);
 	}
 
+	// async functions for saving and loading to local storage
 	async saveBlob() {
 		try {
 			const jsonBlob = JSON.stringify(this.__blob);

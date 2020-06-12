@@ -3,43 +3,72 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import commonStyles from '../../assets/stylesheets/styles';
 import ProgressBar from 'react-native-progress/Bar';
 
+/**
+ * A Business Component that allows the player to perform
+ * various operations such as buy, upgrade or hire a manager
+ * @param {*} props 
+* 	business - business object
+		money - current spendable money
+		moneyTransaction - function to update money
+		buyBusiness - function to buy a business
+		hireManager - function to hire a manager
+		upgradeBusiness - function to upgrade a business
+		automatic - if this business is being managed
+		disabled - if this business is not yet purchased/available
+ */
 const BusinessComponent = (props) => {
-	const [progress, setProgress] = useState(0);
-	const [animating, setAnimating] = useState(false);
-	const [hired, setHired] = useState(props.automatic);
+	const [progress, setProgress] = useState(0); // a value betwee 0 and 1, indicate work progress
+	const [animating, setAnimating] = useState(false); // prevents progress bar concurrency issues
+	const [hired, setHired] = useState(props.automatic); // indicates if we've just hired a manager
 
 	var business = props.business;
 	const progressRefreshInterval = 30;
 
-
+	/**
+	 * Manages rerendering progress bar on a fixed interval
+	 * 
+	 * @param {*} delay - how often to rerender new progress
+	 * @param {*} startTime - when this business started work
+	 * @param {*} stopTime - when this business will end work
+	 * @param {*} revenue - how much this business will earn once work is doen
+	 */
 	const pollProgress = (delay, startTime, stopTime, revenue) => {
 		setTimeout(() => {
 			const nowTime = Date.now();
-			setProgress(1 - (stopTime - nowTime) / (stopTime - startTime));
+			const progressPercentage = 1 - (stopTime - nowTime) / (stopTime - startTime);
 
-			if (nowTime < stopTime) {
+			setProgress(progressPercentage);
+
+			if (nowTime < stopTime) { // we're not done, continue to rerender
 				pollProgress(delay, startTime, stopTime, revenue);
-			} else {
+			} else { // we're done with this work, get our payout
 				props.moneyTransaction(revenue);
 				setAnimating(false);
 				setProgress(0);
 
-				if (props.automatic) {
+				if (props.automatic) { // if we've hired a manager, auto-restart work 
 					addRevenueToBusiness();
 				}
 			}
-		}, delay)
+		}, delay);
 	};
 
+	/**
+	 * kick start work for this business, start progress bar renders
+	 */
 	const addRevenueToBusiness = () => {
-		setAnimating(true);
-		const nowTime = Date.now();
+		setAnimating(true); // do this so players can't spam work button
+		const nowTime = Date.now(); // time of starting this work
 		const workTime = business.time * 1000; // in ms
-		const finishTime = nowTime + workTime;
+		const finishTime = nowTime + workTime; // time we expect to finish work
 
 		pollProgress(progressRefreshInterval, nowTime, finishTime, business.revenue);
 	};
 
+	// full disclaimer, I have no idea if this is the right way to do this ...
+	// RN state updates are async, so we can't call addRevenueToBusiness right after
+	// invoking the button handler. Doing it this way so that when RN rerenders it will
+	// start the work and set the flag to false so it'll only do it once
 	if (hired) {
 		setHired(false);
 		addRevenueToBusiness();
@@ -51,8 +80,7 @@ const BusinessComponent = (props) => {
 				pointerEvents={props.disabled ? 'none' : 'auto'}
 				style={[props.disabled ? commonStyles.disabled : '']}
 				onPress={() => {
-					if (!animating) {
-						setAnimating(true);
+					if (!animating) { // anti-spam check
 						addRevenueToBusiness();
 					}
 				}}>
@@ -62,7 +90,7 @@ const BusinessComponent = (props) => {
 			<View style={styles.businessInfo}>
 				<Text style={commonStyles.buttonText}>Returns: {business.revenue}</Text>
 			</View>
-			{props.disabled ?
+			{props.disabled ? // show either progress bar, or buy business button. Never both
 				<TouchableOpacity
 					style={styles.businessButton}
 					onPress={() => {

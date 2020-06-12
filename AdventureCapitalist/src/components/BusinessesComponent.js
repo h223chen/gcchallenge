@@ -2,20 +2,38 @@ import React, { useState } from 'react';
 import { StyleSheet, View, FlatList } from 'react-native';
 import BusinessComponent from './BusinessComponent';
 
+/**
+ * Businesses Component that shows a list of Business Components
+ * @param {*} props
+ * 		money - current money
+ * 		setMoney - react hook to update money
+ */
 const BusinessesComponent = (props) => {
 	const businesses = global.config.businesses;
-	const [ownedBusinesses, setOwnedBusinesses] = useState(global.storage.getBusinesses());
-	const [managedBusinesses, setManagedBusinesses] = useState(global.storage.getManagers());
+	const [ownedBusinesses, setOwnedBusinesses] = useState(global.storageManager.getBusinesses());
+	const [managedBusinesses, setManagedBusinesses] = useState(global.storageManager.getManagers());
 
+	/**
+	 * funtion that takes a delta amount and modifies 
+	 * current money.
+	 * 	+ve value means increase
+	 * 	-ve value mean decrease
+	 * @param {*} amount - Number value for how much to add/subtract from money
+	 */
 	const moneyTransaction = (amount) => {
 		props.setMoney((prevMoney) => {
 			const updatedMoney = prevMoney + amount;
-			global.storage.setMoney(updatedMoney);
+			global.storageManager.setMoney(updatedMoney);
 
 			return updatedMoney;
 		});
 	};
 
+	/**
+	 * update state to indicate we've bought a new business
+	 * @param {*} business 
+	 * @return boolean - if buying was successful
+	 */
 	const buyBusiness = (business) => {
 		const canBuy = props.money >= business.cost && ownedBusinesses.indexOf(business.name) < 0;
 		if (canBuy) {
@@ -23,12 +41,17 @@ const BusinessesComponent = (props) => {
 
 			const updatedOwnedBusinesses = [...ownedBusinesses, business.name];
 			setOwnedBusinesses(updatedOwnedBusinesses);
-			global.storage.setBusinesses(updatedOwnedBusinesses);
+			global.storageManager.setBusinesses(updatedOwnedBusinesses);
 		}
 
 		return canBuy;
 	};
 
+	/**
+	 * update state to indicate we've hired a manager for a business 
+	 * @param {*} business 
+	 * @return boolean - if hiring was successful
+	 */
 	const hireManager = (business) => {
 		const canHire = props.money >= business.managerCost && managedBusinesses.indexOf(business.name) < 0
 		if (canHire) {
@@ -36,12 +59,17 @@ const BusinessesComponent = (props) => {
 
 			const updatedManagedBusinesses = [...managedBusinesses, business.name];
 			setManagedBusinesses(updatedManagedBusinesses);
-			global.storage.setManagers(updatedManagedBusinesses);
+			global.storageManager.setManagers(updatedManagedBusinesses);
 		}
 
 		return canHire;
 	};
 
+	/**
+	 * update business config to new values to indicate we've upgraded
+	 * @param {*} business 
+	 * @return boolean - if upgrading was successful
+	 */
 	const upgradeBusiness = (business) => {
 		const upgradeCost = business.cost * business.costMult;
 		const canUpgrade = props.money >= upgradeCost;
@@ -52,11 +80,11 @@ const BusinessesComponent = (props) => {
 			business.cost *= business.costMult;
 			business.revenue *= business.revenueMult;
 
-			let financials = global.storage.getFinancials();
+			let financials = global.storageManager.getFinancials();
 			financials[business.name].cost = business.cost;
 			financials[business.name].revenue = business.revenue;
 
-			global.storage.setFinancials(financials);
+			global.storageManager.setFinancials(financials);
 		}
 
 		return canUpgrade;

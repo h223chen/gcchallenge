@@ -10,19 +10,18 @@ import IdleManager from './src/managers/IdleManager';
  * screens here as well as set up some app globals
  */
 export default function App() {
-	// hooks
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState(true); // if we've finished loading data from storage
 
 	// initialize config and variables
 	global.config = config;
-	global.storage = StorageManager.getInstance();
-	const idle = IdleManager.getInstance();
+	global.storageManager = StorageManager.getInstance();
+	const idleManager = IdleManager.getInstance();
 
 	// load data from storage and catch up blob data  from what
 	// it previously was left at to what it should look like now
 	if (config.loadFromStorage) {
-		global.storage.loadBlob().then((blob) => {
-			idle.catchUp();
+		global.storageManager.loadBlob().then((blob) => {
+			idleManager.catchUp();
 			setLoading(false);
 		});
 	}
@@ -34,7 +33,7 @@ export default function App() {
 	 * any revenue generated would write new data to the blob
 	 */
 	const resetButtonHandler = () => {
-		global.storage.__resetBlob();
+		global.storageManager.__resetBlob();
 	}
 
 	return (
@@ -43,6 +42,10 @@ export default function App() {
 				<Button onPress={resetButtonHandler} title='RESET BLOB' />
 			}
 
+			{/* we want to load GameScreen if we don't care to 
+					load from storage at all, or if we do but we've finished
+					loading
+			*/}
 			{(!config.loadFromStorage || !loading) &&
 				<GameScreen />
 			}

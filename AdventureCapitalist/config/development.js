@@ -1,7 +1,8 @@
 import base from './base';
 
+// development values for quick testing
 const config = Object.assign(base, {
-	// development specific overrides here
+	// dev specific overrides here
 	businesses: [
 		{
 			id: 0,

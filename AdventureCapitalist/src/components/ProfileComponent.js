@@ -1,6 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 
+/**
+ * Profile Component that shows a profile picture and the player's
+ * current money
+ * @param {*} props.money
+ */
 const ProfileComponent = ({ money }) => {
 	return (
 		<View style={styles.profileComponent}>

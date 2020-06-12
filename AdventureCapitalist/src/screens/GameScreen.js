@@ -3,8 +3,15 @@ import { StyleSheet, View } from 'react-native';
 import BusinessesComponent from '../components/BusinessesComponent';
 import ProfileComponent from '../components/ProfileComponent';
 
+/**
+ * Main game screen
+ * 
+ * Contains a top Profile component showing profile pic and money
+ * and a businesses component that lists out the businesses the player
+ * can interact with
+ */
 const GameScreen = () => {
-	const [money, setMoney] = useState(global.storage.getMoney());
+	const [money, setMoney] = useState(global.storageManager.getMoney()); // total money
 
 	return (
 		<View style={styles.GameScreen}>
