@@ -84,7 +84,7 @@ const BusinessComponent = (props) => {
 						addRevenueToBusiness();
 					}
 				}}>
-				<Image style={styles.businessImage} source={require('../../assets/profile.jpg')}></Image>
+				<Image style={styles.businessImage} source={require(`../../assets/${business.name}.jpg`)}></Image>
 			</TouchableOpacity>
 
 			<View style={styles.businessInfo}>
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
 	},
 	businessImage: {
 		margin: 5,
-		borderRadius: 50,
+		//borderRadius: 50,
 		width: 50,
 		height: 50
 	},
