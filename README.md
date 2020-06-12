@@ -8,7 +8,7 @@ This repo was created for the purpose of a coding challenge. The challenge was t
 > In order to automate this, you can hire a manager who can run the business for you, so you don't have to click manually anymore. Then you can upgrade the business and gain even more money.
 
 ## Installation
-		cd AdventureCapitalist
+    cd AdventureCapitalist
     npm install
     npm start
 

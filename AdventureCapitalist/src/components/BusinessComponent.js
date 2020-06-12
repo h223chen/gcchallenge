@@ -143,7 +143,6 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		margin: 10,
 		borderWidth: 1,
-		borderColor: 'blue',
 		opacity: 1
 	},
 	businessImage: {
