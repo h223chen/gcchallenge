@@ -74,6 +74,10 @@ const BusinessComponent = (props) => {
 		addRevenueToBusiness();
 	}
 
+	const buyDisabled = props.money < business.cost;
+	const upgradeDisabled = props.money < business.cost*business.costMult;
+	const hireDisabled = props.disabled || props.automatic || props.money < business.managerCost;
+
 	return (
 		<View style={styles.businessComponent}>
 			<TouchableOpacity
@@ -92,7 +96,7 @@ const BusinessComponent = (props) => {
 			</View>
 			{props.disabled ? // show either progress bar, or buy business button. Never both
 				<TouchableOpacity
-					style={styles.businessButton}
+					style={[styles.businessButton, buyDisabled ? commonStyles.disabled : '']}
 					onPress={() => {
 						props.buyBusiness(business);
 					}}>
@@ -112,7 +116,7 @@ const BusinessComponent = (props) => {
 			}
 			<TouchableOpacity
 				pointerEvents={props.disabled ? 'none' : 'auto'}
-				style={styles.businessButton}
+				style={[styles.businessButton, upgradeDisabled ? commonStyles.disabled : '']}
 				onPress={() => {
 					props.upgradeBusiness(business);
 				}}>
@@ -121,7 +125,7 @@ const BusinessComponent = (props) => {
 			</TouchableOpacity>
 			<TouchableOpacity
 				pointerEvents={props.disabled ? 'none' : 'auto'}
-				style={[styles.businessButton, props.disabled || props.automatic ? commonStyles.disabled : '']}
+				style={[styles.businessButton, hireDisabled ? commonStyles.disabled : '']}
 				onPress={() => {
 					if (props.hireManager(business)) {
 						setHired(true);

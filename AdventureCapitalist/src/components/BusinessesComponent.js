@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, ImageBackground } from 'react-native';
 import BusinessComponent from './BusinessComponent';
 
 /**
@@ -92,27 +92,28 @@ const BusinessesComponent = (props) => {
 
 	return (
 		<View style={styles.businessesComponent}>
-			<FlatList
-				data={businesses}
-				extraData={moneyTransaction}
-				keyExtractor={business => business.name}
-				renderItem={({ item }) => {
-					const business = item;
-					return (
-						<BusinessComponent
-							business={item}
-							money={props.money}
-							moneyTransaction={moneyTransaction}
-							buyBusiness={buyBusiness}
-							hireManager={hireManager}
-							upgradeBusiness={upgradeBusiness}
-							automatic={managedBusinesses.indexOf(business.name) >= 0}
-							disabled={ownedBusinesses.indexOf(business.name) < 0}
-						/>
-					);
-				}}
-			/>
-
+			<ImageBackground source={require('../../assets/background.jpg')}>
+				<FlatList
+					data={businesses}
+					extraData={moneyTransaction}
+					keyExtractor={business => business.name}
+					renderItem={({ item }) => {
+						const business = item;
+						return (
+							<BusinessComponent
+								business={item}
+								money={props.money}
+								moneyTransaction={moneyTransaction}
+								buyBusiness={buyBusiness}
+								hireManager={hireManager}
+								upgradeBusiness={upgradeBusiness}
+								automatic={managedBusinesses.indexOf(business.name) >= 0}
+								disabled={ownedBusinesses.indexOf(business.name) < 0}
+							/>
+						);
+					}}
+				/>
+			</ImageBackground>
 		</View>
 	)
 };
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
 		borderColor: 'white',
 		alignItems: 'stretch',
 		padding: 10
-	}
+	}	
 });
 
 export default BusinessesComponent;
