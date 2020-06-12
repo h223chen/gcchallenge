@@ -11,10 +11,8 @@ const BusinessComponent = (props) => {
 	var business = props.business;
 	const progressRefreshInterval = 30;
 
-	let progressTimeout;
 
 	const pollProgress = (delay, startTime, stopTime, revenue) => {
-		if (!progressTimeout) { }
 		setTimeout(() => {
 			const nowTime = Date.now();
 			setProgress(1 - (stopTime - nowTime) / (stopTime - startTime));
@@ -69,8 +67,7 @@ const BusinessComponent = (props) => {
 					style={styles.businessButton}
 					onPress={() => {
 						props.buyBusiness(business);
-					}
-					}>
+					}}>
 					<Text style={commonStyles.buttonText}>Buy Business: ${business.cost}</Text>
 				</TouchableOpacity>
 				:
@@ -101,7 +98,6 @@ const BusinessComponent = (props) => {
 					if (props.hireManager(business)) {
 						setHired(true);
 					}
-
 				}}>
 
 				<Text style={commonStyles.buttonText}>Hire Manager: ${business.managerCost}</Text>
