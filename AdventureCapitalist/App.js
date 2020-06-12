@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Button } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import GameScreen from './src/screens/GameScreen';
 import config from './config/production';
 import StorageManager from './src/managers/StorageManager';
@@ -24,23 +24,11 @@ export default function App() {
 			idleManager.catchUp();
 			setLoading(false);
 		});
-	}
-
-	/**
-	 * DEBUG function, resets the blob to initial data.
-	 * you need to refresh the game as soon as you hit the button.
-	 * This is because if your businesses are being run by managers
-	 * any revenue generated would write new data to the blob
-	 */
-	const resetButtonHandler = () => {
-		global.storageManager.__resetBlob();
-	}
+	}	
 
 	return (
 		<View style={styles.container}>
-			{(config.resetButton) &&
-				<Button onPress={resetButtonHandler} title='RESET BLOB' />
-			}
+			
 
 			{/* we want to load GameScreen if we don't care to 
 					load from storage at all, or if we do but we've finished

@@ -8,8 +8,14 @@ This repo was created for the purpose of a coding challenge. The challenge was t
 > In order to automate this, you can hire a manager who can run the business for you, so you don't have to click manually anymore. Then you can upgrade the business and gain even more money.
 
 ## Installation
+    cd AdventureCapitalist
     npm install
     npm start
+
+The Expo Bundler should load automatically, but if not you can find the URL (likely localhost:19###) and paste it into your browser. On the left sidebar, choose "Run in web browser"
+
+## Configuration
+There are a few options you can play around with for testing found in config/development.js. This file overwrites the default configuration values and can be used to show a reset blob button or disabling loading blob from storage (disabling idle). I did not have time to implement something into the run commands to do this at build time so you'll need to modify the import line in App.js for the time being.
 
 ## Project Info
 This implementation uses React Native and Expo for convenient development, testing and deployment of the game to multiple platforms. While the game technically will run on iOS and Android devices, the game is designed to be run in the browser and has not yet been implemented with reactive design due to time constraints. 

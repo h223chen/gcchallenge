@@ -1,5 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Button } from 'react-native';
+
+/**
+	 * DEBUG function, resets the blob to initial data.
+	 * you need to refresh the game as soon as you hit the button.
+	 * This is because if your businesses are being run by managers
+	 * any revenue generated would write new data to the blob
+	 */
+	const resetButtonHandler = () => {
+		global.storageManager.__resetBlob();
+	}
 
 /**
  * Profile Component that shows a profile picture and the player's
@@ -9,7 +19,10 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 const ProfileComponent = ({ money }) => {
 	return (
 		<View style={styles.profileComponent}>
-			<Image style={styles.profileImage} source={require('../../assets/profile.png')} />
+			{(config.resetButton) &&
+				<Button onPress={resetButtonHandler} title='RESET BLOB' />
+			}
+			<Image style={styles.profileImage} source={require('../../assets/profile.jpg')} />
 			<Text style={styles.money}>${money}</Text>
 		</View>
 	)
