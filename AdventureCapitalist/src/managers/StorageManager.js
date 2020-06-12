@@ -8,9 +8,9 @@ class StorageManager {
 		this.__initBlob();
 	}
 
-    /**
-     * @returns {StorageManager}
-     */
+	/**
+	 * @returns {StorageManager}
+	 */
 	static getInstance() {
 		if (StorageManager.instance == null) {
 			StorageManager.instance = new StorageManager();

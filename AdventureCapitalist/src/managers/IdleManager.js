@@ -1,9 +1,9 @@
 class IdleManager {
 	static instance = null;
 
-    /**
-     * @returns {IdleManager}
-     */
+	/**
+	 * @returns {IdleManager}
+	 */
 	static getInstance() {
 		if (IdleManager.instance == null) {
 			IdleManager.instance = new IdleManager();

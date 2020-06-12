@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Button } from 'react-native';
 import GameScreen from './src/screens/GameScreen';
 import config from './config/base';
-import StorageManager from './src/managers/StorageManager';
+import StorageManager from './src/mFanagers/StorageManager';
 import IdleManager from './src/managers/IdleManager';
 
 /**
