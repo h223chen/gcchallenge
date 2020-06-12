@@ -1,18 +1,17 @@
-import buttonStyles from './button'
+import buttonStyles from './buttonStyles'
 
-const devTest = {
-    borderColor: 'red',
-    borderWidth: 3
+const disabled = {
+	opacity: 0.4
 }
 
-const buttonDev = {
-    ...buttonStyles.button,
-    borderColor: 'red'
-}
-
+/**
+ * Master styles object
+ * all other styles sheets should be imported here and 
+ * consolidated
+ */
 const styles = {
-    ...buttonStyles,
-    buttonDev: buttonDev
+	...buttonStyles,
+	disabled: disabled
 };
 
 export default styles;

@@ -1,12 +1,13 @@
 {
   "expo": {
-    "name": "AdventureCapitalist",
-    "slug": "AdventureCapitalist",
+    "name": "GCAdventureCapitalist",
+    "slug": "gc-adventurecapitalist",
     "platforms": [
       "ios",
       "android",
       "web"
     ],
+    "sdkVersion": "37.0.0",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -23,6 +24,7 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": "Coding Challenge for GC"
   }
 }
