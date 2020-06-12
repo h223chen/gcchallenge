@@ -51,6 +51,12 @@ const BusinessesComponent = (props) => {
 
             business.cost *= business.costMult;
             business.revenue *= business.revenueMult;
+
+            let financials = global.storage.getFinancials();
+            financials[business.name].cost = business.cost;
+            financials[business.name].revenue = business.revenue;
+
+            global.storage.setFinancials(financials);
         }
 
         return canUpgrade;

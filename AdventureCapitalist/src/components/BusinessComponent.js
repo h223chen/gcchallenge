@@ -62,7 +62,6 @@ const BusinessComponent = (props) => {
             </TouchableOpacity>
 
             <View style={styles.businessInfo}>
-                <Text style={commonStyles.buttonText}>Cost: {business.cost}</Text>
                 <Text style={commonStyles.buttonText}>Returns: {business.revenue}</Text>
             </View>
             {props.disabled ?

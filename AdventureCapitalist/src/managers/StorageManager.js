@@ -2,12 +2,11 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 class StorageManager {
     static instance = null;
-    __blob = {
-        '@businesses': [global.config.businesses[0].name],
-        '@managers': [],
-        '@money': 0,
-        '@timestamp': Date.now()
-    };
+    __blob = {};        
+
+    constructor() {
+        this.__initBlob();
+    }
     
     /**
      * @returns {StorageManager}
@@ -21,20 +20,34 @@ class StorageManager {
     }
 
     keys = {
+        BLOB: '@blob',
         BUSINESSES: '@businesses',
         MANAGERS: '@managers',
         MONEY: '@money',
-        TIMESTAMP: '@timestamp'
+        TIMESTAMP: '@timestamp',
+        FINANCIALS: '@financials'
     }
 
-    __resetBlob() {
+    __initBlob() {
         this.__blob = {
             '@businesses': [global.config.businesses[0].name],
             '@managers': [],
             '@money': 0,
-            '@timestamp': Date.now()
+            '@timestamp': Date.now(),
+            '@financials': {}
         };
-        this.saveBlob();
+
+        global.config.businesses.map((business) => {
+            this.__blob[this.keys.FINANCIALS][business.name] = {
+                cost: business.cost,
+                revenue: business.revenue
+            }
+        });        
+    }
+
+    __resetBlob() {
+        // this.__initBlob();
+        localStorage.removeItem(this.keys.BLOB);
     }
 
     getItem(key) {
@@ -70,6 +83,10 @@ class StorageManager {
         return this.getItem(this.keys.TIMESTAMP);
     }
 
+    getFinancials() {
+        return this.getItem(this.keys.FINANCIALS);
+    }
+
     // convenience setters
 
     setBusinesses(businesses) {
@@ -83,11 +100,15 @@ class StorageManager {
     setMoney(money) {
         this.setItem(this.keys.MONEY, money);
     }
+
+    setFinancials(financials) {
+        this.setItem(this.keys.FINANCIALS, financials);
+    }
     
     async saveBlob() {
         try {
             const jsonBlob = JSON.stringify(this.__blob);
-            AsyncStorage.setItem('@blob', jsonBlob);
+            AsyncStorage.setItem(this.keys.BLOB, jsonBlob);
         } catch (e) {
             console.error(e);
         }
@@ -95,7 +116,7 @@ class StorageManager {
     
     async loadBlob() {
         try {
-            const jsonBlob = await AsyncStorage.getItem('@blob');
+            const jsonBlob = await AsyncStorage.getItem(this.keys.BLOB);
             this.__blob = jsonBlob != null ? JSON.parse(jsonBlob) : this.__blob;
 
             return this.__blob;         

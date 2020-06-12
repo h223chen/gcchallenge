@@ -19,6 +19,12 @@ class IdleManager {
             global.storage.setMoney(global.storage.getMoney() + revenue);
         }
         
+        global.config.businesses.map((business) => {
+            const financials = global.storage.getFinancials();
+            business.cost = financials[business.name].cost;
+            business.revenue = financials[business.name].revenue;
+        });  
+        
     }
 
     catchUp() {
