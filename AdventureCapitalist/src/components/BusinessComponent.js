@@ -84,7 +84,7 @@ const BusinessComponent = (props) => {
 						addRevenueToBusiness();
 					}
 				}}>
-				<Image style={styles.businessImage} source={require('../../assets/profile.png')}></Image>
+				<Image style={styles.businessImage} source={require('../../assets/profile.jpg')}></Image>
 			</TouchableOpacity>
 
 			<View style={styles.businessInfo}>
