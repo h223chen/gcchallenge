@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Button } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import BusinessesComponent from '../components/BusinessesComponent';
 import ProfileComponent from '../components/ProfileComponent';
 
